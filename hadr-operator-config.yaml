@@ -1,0 +1,39 @@
+
+## Simple HADR setup
+
+apiVersion: db2u.databases.ibm.com/v1alpha1
+kind: Db2uHadr
+metadata:
+  name: example-hadr
+spec:
+  primary:
+    db2uCluster: "db2oltp-primary"
+  standby:
+    db2uCluster: "db2oltp-standby"
+
+## Another example of HADR setup 
+apiVersion: db2u.databases.ibm.com/v1alpha1
+kind: Db2uHadr
+metadata:
+  name: db2u-oltp-hadr
+spec:
+  primary:
+    db2uCluster: "db2u-oltp-primary"
+    service:
+      name: "db2u-oltp-primary-hadr-svc"
+      port: 60010
+  standby:
+    db2uCluster: "db2u-oltp-standby"
+    service:
+      name: "db2u-oltp-standby-hadr-svc"
+      port: 60012
+  etcd:
+    name: "cloud-etc-svc"
+    port: 3056
+  dbConfig:
+    timeOut: 90
+    syncMode: "NEARSYNC"
+    peerWindow: 120
+  features:
+    enableAutomaticClientReroute: false
+    enableReadsOnStandby: true

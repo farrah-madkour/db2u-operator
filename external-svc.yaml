@@ -1,0 +1,20 @@
+##  To create an external service use this yaml and fill in the blanks. After it is created click on the yaml 
+##  And YAML will be updated with a external port. Note we used RHOS on Azure additonal steps might be needed. 
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${LOAD_BALANCER_SVC}
+  namespace: ${NAMESPACE}
+spec:
+  ports:
+  - port: 50000
+    protocol: TCP
+    targetPort: 50000
+  selector:
+    app: ${DB2U_CLUSTER}
+    component: db2wh
+    formation_id: ${DB2U_CLUSTER}
+    role: db
+    type: engine
+  externalTrafficPolicy: Local
+  type: LoadBalancer

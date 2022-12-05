@@ -1,0 +1,81 @@
+apiVersion: db2u.databases.ibm.com/v1
+kind: Db2uCluster
+metadata:
+  name: db2oltp-test-conn2
+  namespace: db2-operator
+spec:
+  account:
+    privileged: true
+  environment:
+    database:
+      name: bludb
+    dbType: db2oltp
+    ldap:
+      enabled: false
+  license:
+    accept: true
+  podConfig:
+    db2u:
+      resource:
+        db2u:
+          limits:
+            cpu: "4"
+            memory: 16Gi
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: icp4data
+                operator: In
+                values:
+                  - database-db2oltp
+  size: 1
+  storage:
+  - name: meta
+    spec:
+      accessModes:
+      - ReadWriteMany
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: ocs-storagecluster-cephfs
+    type: create
+  - name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: ocs-storagecluster-ceph-rbd
+    type: template
+  - claimName: c-db2oltp-primary-backup
+    name: backup
+    spec:
+      resources: {}
+    type: existing
+  - name: activelogs
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: ocs-storagecluster-ceph-rbd
+    type: template
+  - name: tempts
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: ocs-storagecluster-ceph-rbd
+    type: template
+  tolerations:
+    - key: icp4data
+      operator: Equal
+      value: database-db2oltp
+      effect: NoSchedule
+  version: 11.5.7.0-cn5
