@@ -128,10 +128,10 @@ Before beginning, ensure you have a shared volume for backup storage between the
 
 Steps for deploying a shared volume between two Db2 instances are detailed here: https://www.ibm.com/docs/en/db2/11.5?topic=api-using-shared-volume-backup-storage
 
-[This](db2u-install/HADR_Standby.yaml) CR is an example of a shared backup storage persistent volume claim (PVC) from the primary database
+[This](db2u-operator/HADR_Standby.yaml) CR is an example of a shared backup storage persistent volume claim (PVC) from the primary database
 
 HADR Procedure
-1. Create a YAML file for the HADR custom resource definition on one of the master nodes and save the file, for example as /tmp/db2u_hadr.yaml. An example HADR CRD is located [here](db2u-install/hadr-operator-config.yaml).
+1. Create a YAML file for the HADR custom resource definition on one of the master nodes and save the file, for example as /tmp/db2u_hadr.yaml. An example HADR CRD is located [here](db2u-operator/hadr-operator-config.yaml).
 > You can use the ```oc get Db2uCluster``` command to get the names for the db2uCluster keyword.
 
 2. Run the following command to create the CRD.
